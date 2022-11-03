@@ -50,14 +50,15 @@ resource "google_compute_instance" "vm_instance" {
     access_config {
     }
   }
-    attached_disk {
+
+  attached_disk {
       source = google_compute_disk.lab09.self_link
       device_name = "lab09"
   }
 
-    service_account {
-    email  = google_service_account.lab08-service-account.email
-    scopes = ["cloud-platform"]
+  // Local SSD disk
+  scratch_disk {
+    interface = "NVME"
   }
 
 }
@@ -72,15 +73,13 @@ resource "google_compute_firewall" "default-firewall" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_service_account" "lab08-service-account" {
-  account_id   = "lab08-service-account"
-  display_name = "lab08-service-account"
-  description = "Service account for lab 08"
-}
-
-resource "google_project_iam_member" "project_member" {
-  role = "roles/compute.viewer"
-  member = "serviceAccount:${google_service_account.lab08-service-account.email}"
+resource "google_compute_disk" "lab09" {
+    name = "lab09"
+    type = "pd-ssd"
+    labels = {
+        environment = "dev"
+    }
+    size = "100"
 }
 
 output "external-ip" {
