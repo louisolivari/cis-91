@@ -8,5 +8,14 @@
         update_cache: yes
         cache_valid_time: 3600
         name:
+          - apache2
           - python3-pip 
           - python3-venv
+          - nodejs
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
