@@ -11,4 +11,31 @@
             - apache2
             - php
             - php-xml
+
+      - name: Mount extra disk
+        ansible.posix.mount:
+          path: /var/www
+          src: /dev/disk/by-id/google-doukwiki_disk
+          fstype: ext4
+          state: present
+
+      - name: Create directory
+        ansible.builtin.file:
+          path: /var/www
+          state: directory
+
+      - name: Extract https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz into /var/www/html
+        ansible.builtin.unarchive:
+          src: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
+          dest: /var/www/html
+          remote_src: yes
+
+      - name: Change file ownership
+        ansible.builtin.file:
+          path: /var/www/html/dokuwiki
+          state: directory
+          recurse: yes
+          owner: www-data
+          group: www-data
+
   

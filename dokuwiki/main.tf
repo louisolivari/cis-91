@@ -67,6 +67,50 @@ resource "google_compute_instance" "vm_instance" {
     access_config {
     }
   }
+
+  attached_disk {
+      source = google_compute_disk.dokuwiki_disk.self_link
+      device_name = "dokuwiki-disk"
+  }
+
+    service_account {
+    email  = google_service_account.lab08-service-account.email
+    scopes = ["cloud-platform"]
+  }
+}
+
+resource "google_service_account" "lab08-service-account" {
+  account_id   = "lab08-service-account"
+  display_name = "lab08-service-account"
+  description = "Service account for lab 08"
+}
+
+resource "google_project_iam_member" "project_member" {
+  role = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.lab08-service-account.email}"
+}
+
+resource "google_storage_bucket" "louis-dokuwiki-bucket" {
+    name = "louis-dokuwiki-bucket"
+    location = "US"
+
+    lifecycle_rule {
+        condition {
+            age = 180
+        }
+        action {
+            type = "Delete"
+        }
+    }
+}
+
+resource "google_compute_disk" "dokuwiki_disk" {
+    name = "dokuwiki-disk"
+    type = "pd-ssd"
+    labels = {
+      "environment" = "dev"
+    }
+    size = "100"
 }
 
 output "external-ip" {
