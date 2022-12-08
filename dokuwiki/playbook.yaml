@@ -38,4 +38,12 @@
           owner: www-data
           group: www-data
 
+      -name: Files older than six months should be deleted automatically
+        ansible.builtin.copy:
+          src: /
+          dest: /etc/cron.hourly
+          owner: root
+          group: root
+          mode: '0744'
+
   
