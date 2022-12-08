@@ -12,7 +12,7 @@
             - php
             - php-xml
 
-      - name: Mount extra disk
+      - name: Mount second persistent disk
         ansible.posix.mount:
           path: /var/www
           src: /dev/disk/by-id/google-doukwiki_disk
@@ -40,7 +40,7 @@
 
       -name: Files older than six months should be deleted automatically
         ansible.builtin.copy:
-          src: /
+          src: backup
           dest: /etc/cron.hourly
           owner: root
           group: root
