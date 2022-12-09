@@ -127,10 +127,6 @@ resource "google_compute_global_forwarding_rule" "default" {
   ip_address            = google_compute_global_address.default.address
 }
 
-output "external-ip" {
-  value = google_compute_instance.webservers.network_interface[0].access_config[0].nat_ip
-}
-
 output "lb-ip" {
   value = google_compute_global_address.default.address
 }
