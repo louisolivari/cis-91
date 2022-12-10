@@ -16,6 +16,12 @@
             - python3-psycopg2
             - libpq-dev
             - acl
+      - name: Mount second persistent disk
+            ansible.posix.mount:
+              path: /var/lib/postgresql
+              src: /dev/disk/by-id/data
+              fstype: ext4
+              state: present    
       - name: Update postgresql config 
         ansible.builtin.lineinfile:
           path: /etc/postgresql/12/main/postgresql.conf
