@@ -15,7 +15,7 @@
       - name: Mount second persistent disk
         ansible.posix.mount:
           path: /var/www
-          src: /dev/disk/by-id/google-doukwiki_disk
+          src: /dev/disk/by-id/google-dokuwiki_disk
           fstype: ext4
           state: present
 
