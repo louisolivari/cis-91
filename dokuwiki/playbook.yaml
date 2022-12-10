@@ -41,7 +41,7 @@
       - name: Files older than six months should be deleted automatically
         ansible.builtin.copy:
           src: backup
-          dest: /etc/cron.hourly
+          dest: /etc/cron.hourly/backup
           owner: root
           group: root
           mode: '0744'
