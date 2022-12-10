@@ -38,6 +38,10 @@ resource "google_compute_network" "vpc_network" {
   name = "dokuwiki-network"
 }
 
+#
+# Firewall Config
+#
+
 resource "google_compute_firewall" "default-firewall" {
   name = "dokuwiki-firewall"
   network = google_compute_network.vpc_network.name
@@ -68,6 +72,10 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
+#
+# Additional Disk
+#
+
   attached_disk {
       source = google_compute_disk.dokuwiki_disk.self_link
       device_name = "dokuwiki-disk"
@@ -79,6 +87,10 @@ resource "google_compute_instance" "vm_instance" {
   }
 }
 
+#
+# Service Account
+#
+
 resource "google_service_account" "lab08-service-account" {
   account_id   = "lab08-service-account"
   display_name = "lab08-service-account"
@@ -89,6 +101,10 @@ resource "google_project_iam_member" "project_member" {
   role = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.lab08-service-account.email}"
 }
+
+#
+# Storage Bucket
+#
 
 resource "google_storage_bucket" "louis-dokuwiki-bucket" {
     name = "louis-dokuwiki-bucket"
@@ -104,6 +120,10 @@ resource "google_storage_bucket" "louis-dokuwiki-bucket" {
     }
 }
 
+#
+# Dokuwiki Disk
+#
+
 resource "google_compute_disk" "dokuwiki_disk" {
     name = "dokuwiki-disk"
     type = "pd-ssd"
@@ -112,6 +132,10 @@ resource "google_compute_disk" "dokuwiki_disk" {
     }
     size = "100"
 }
+
+#
+# Output External IP Address
+#
 
 output "external-ip" {
   value = google_compute_instance.vm_instance.network_interface[0].access_config[0].nat_ip
