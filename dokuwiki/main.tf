@@ -81,15 +81,15 @@ resource "google_compute_instance" "vm_instance" {
       device_name = "dokuwiki-disk"
   }
 
+#
+# Service Account
+#
+
   service_account {
     email  = google_service_account.lab08-service-account.email
     scopes = ["cloud-platform"]
   }
 }
-
-#
-# Service Account
-#
 
 resource "google_service_account" "lab08-service-account" {
   account_id   = "lab08-service-account"
