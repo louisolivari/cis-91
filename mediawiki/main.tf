@@ -38,7 +38,8 @@ resource "google_compute_network" "vpc_network" {
 resource "google_compute_instance" "webservers" {
   count        = 3
   name         = "web${count.index}"
-  machine_type = "e2-micro"
+  machine_type = "e2-medium"
+  tags = ["web"]
 
   boot_disk {
     initialize_params {
@@ -57,12 +58,36 @@ resource "google_compute_instance" "webservers" {
   }
 }
 
+resource "google_compute_instance" "db" {
+  name         = "db"
+  machine_type = "e2-medium"
+  tags = ["db"]
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2004-lts"
+    }
+  }
+
+  network_interface {
+    network = google_compute_network.vpc_network.name
+    access_config {
+    }
+  }
+
+  attached_disk {
+    source = google_compute_disk.data.self_link
+    device_name = "data"
+  }
+
+}
+
 resource "google_compute_firewall" "default-firewall" {
   name = "default-firewall"
   network = google_compute_network.vpc_network.name
   allow {
     protocol = "tcp"
-    ports = ["22", "80", "3000"]
+    ports = ["22", "80", "5432"]
   }
   source_ranges = ["0.0.0.0/0"]
 }
@@ -76,6 +101,15 @@ resource "google_compute_health_check" "webservers" {
   http_health_check {
     port = 80
   }
+}
+
+resource "google_compute_disk" "data" {
+    name = "data"
+    type = "pd-ssd"
+    labels = {
+      "environment" = "dev"
+    }
+    size = "100"
 }
 
 resource "google_compute_instance_group" "webservers" {
