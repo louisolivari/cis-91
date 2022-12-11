@@ -39,7 +39,12 @@ resource "google_compute_instance" "webservers" {
   count        = 3
   name         = "web${count.index}"
   machine_type = "e2-medium"
+
   tags = ["web"]
+
+  labels = {
+      name: "web${count.index}"
+    }
 
   boot_disk {
     initialize_params {
@@ -53,9 +58,6 @@ resource "google_compute_instance" "webservers" {
     }
   }
 
-  labels = {
-    role: "web"
-  }
 }
 
 resource "google_compute_instance" "db" {

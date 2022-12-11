@@ -24,3 +24,4 @@
         ansible.builtin.file:
           path: /var/www/html/LocalSettings.php
           state: absent
+          
