@@ -33,7 +33,7 @@
         ansible.builtin.file:
           path: /var/lib/postgresql
           state: directory
-          
+      
       - name: Update postgresql config 
         ansible.builtin.lineinfile:
           path: /etc/postgresql/12/main/postgresql.conf
