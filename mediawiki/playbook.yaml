@@ -97,6 +97,14 @@
             - composer
             - unzip 
         notify: Restart apache
+      - name: Update health.html so we can see the difference between hosts 
+        blockinfile:
+          path: /var/www/html/health.html
+          owner: www-data 
+          marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+          create: true
+          block: | 
+            <h1>This is the server {{ inventory_hostname }}</h1>
       - name: Check if MediaWiki is downloaded and installed
         stat: 
           path: /var/www/html/index.html
