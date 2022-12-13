@@ -10,22 +10,21 @@
         name:
           - python3-pip 
           - python3-venv
+          - nginx
     
     - name: Create a ext4 filesystem for lab09
       community.general.filesystem:
         fstype: ext4
         dev: /dev/disk/by-id/google-lab09
-    
+
+    - name: Create a directory if it doesn't exist
+      ansible.builtin.file:
+        path: /data
+        state: directory
+
     - name: Mount persistent disk
       ansible.posix.mount:
         path: /data
-        src: /dev/disk/by-id/google-lab09
-        fstype: ext4
-        state: mounted
-
-    - name: Mount scratch disk
-      ansible.posix.mount:
-        path: /scratch
         src: /dev/disk/by-id/google-lab09
         fstype: ext4
         state: mounted

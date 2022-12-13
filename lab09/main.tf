@@ -56,10 +56,10 @@ resource "google_compute_instance" "vm_instance" {
       device_name = "lab09"
   }
 
-  // Local SSD disk
-  scratch_disk {
-    interface = "NVME"
-  }
+  # Local SSD disk
+  # scratch_disk {
+  #  interface = "NVME"
+  # }
 
 }
 
@@ -68,7 +68,7 @@ resource "google_compute_firewall" "default-firewall" {
   network = google_compute_network.vpc_network.name
   allow {
     protocol = "tcp"
-    ports = ["22", "80", "3000"]
+    ports = ["22", "80"]
   }
   source_ranges = ["0.0.0.0/0"]
 }
