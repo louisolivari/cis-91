@@ -89,7 +89,7 @@ resource "google_compute_firewall" "default-firewall" {
   network = google_compute_network.vpc_network.name
   allow {
     protocol = "tcp"
-    ports = ["22", "80", "5432"]
+    ports = ["22", "80"]
   }
   source_ranges = ["0.0.0.0/0"]
 }
@@ -111,7 +111,7 @@ resource "google_compute_health_check" "webservers" {
   check_interval_sec = 1
 
   http_health_check {
-    port = 80
+    port = "80"
     request_path = "/health.html"
     }
 }
