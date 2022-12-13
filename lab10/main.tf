@@ -90,7 +90,14 @@ resource "google_compute_disk" "lab09" {
     labels = {
         environment = "dev"
     }
-    size = "16"
+    size = "100"
+}
+
+resource "google_storage_bucket" "louis-bucket" {
+    name = "louis-bucket"
+    location = "US"
+    storage_class = "multi_regional"
+
 }
 
 output "external-ip" {
